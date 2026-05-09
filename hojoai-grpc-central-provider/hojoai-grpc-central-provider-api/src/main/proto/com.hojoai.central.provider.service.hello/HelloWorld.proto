@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.hojoai.central.provider.service.hello";
+option java_outer_classname = "HelloWorldProto";
+option objc_class_prefix = "HW";
+
+package hello;
+
+service HelloWorldService {
+  rpc sayHello (HelloWorldSayHelloRequest) returns (HelloWorldDTO) {}
+}
+
+message HelloWorldSayHelloRequest {
+  string asking = 1;
+}
+
+message HelloWorldDTO {
+  string answer = 1;
+}

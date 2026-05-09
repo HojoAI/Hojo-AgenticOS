@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.hojoai.central.provider.grpc";
+option java_outer_classname = "PushProto";
+option objc_class_prefix = "HW";
+
+package push;
+
+service PushService {
+
+  rpc push (PushReqDTO) returns (PushRespDTO) {}
+
+}
+
+message PushReqDTO {
+  string pushReqStr = 1;
+}
+
+message PushRespDTO {
+  bool success = 1;
+}

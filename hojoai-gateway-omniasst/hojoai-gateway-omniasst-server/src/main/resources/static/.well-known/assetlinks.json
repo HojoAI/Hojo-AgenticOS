@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.hojoai.personalassistant",
+    "sha256_cert_fingerprints": ["5C:90:F8:3B:ED:EC:74:F6:17:2D:4D:39:37:02:02:76:10:F0:EA:82:BF:68:1E:EA:34:BD:A1:71:F5:CE:9F:C6"]
+  }
+}]

@@ -1,0 +1,19 @@
+# Open Source License
+
+**Licensor / company name:** **HojoAI**.
+
+Hojo-Agentic-OS is licensed under a modified version of the Apache License, Version 2.0, with the following additional conditions:
+
+1. **Branding integrity.** You may not remove, modify, or suppress the "X-Powered-By" HTTP header, the "powered_by" metadata field (or any equivalent field used to identify the software in responses or payloads), or any Hojo or HojoAI branding elements in API responses. Any attempt to do so requires explicit written authorization from **HojoAI**. You may not remove or modify brand or attribution statements that **HojoAI** (the "Licensor") provides in or with the Work—including without limitation in source file headers, package or artifact metadata, NOTICE files, or build manifests—without such authorization. **Removing or modifying the foregoing without authorization violates this License; commercial authorization is required** (contact bd@hojoai.com).
+
+2. **Contributors.** As a contributor, you agree that:
+   a. The producer may adjust this open-source agreement to be more strict or more permissive as deemed necessary.
+   b. Your contributed code may be used for commercial purposes, including but not limited to cloud business or hosted service operations.
+
+**Inbound contributions.** If you submit changes for inclusion in this Work, you license those changes under **this same License** (Apache License 2.0 **as modified** by the additional conditions above). That grant is **not** “Apache License 2.0” alone without these additional terms, unless you and **HojoAI** explicitly agree otherwise in writing.
+
+Apart from the specific conditions mentioned above, all other rights and restrictions follow the Apache License, Version 2.0. Detailed information about the Apache License, Version 2.0 can be found at http://www.apache.org/licenses/LICENSE-2.0.
+
+For commercial licensing inquiries: bd@hojoai.com
+
+© 2026 HojoAI

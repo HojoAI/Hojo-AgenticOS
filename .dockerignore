@@ -1,0 +1,10 @@
+.git
+.gitignore
+*.md
+assets/
+docs/
+*.log
+.idea/
+*.iml
+.DS_Store
+*/logs/

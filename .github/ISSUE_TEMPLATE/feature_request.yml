@@ -1,0 +1,45 @@
+name: 功能建议
+description: 提议新能力或改进现有行为
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请先搜索是否已有类似提案。若为较大改动，维护者可能需要先讨论再接受实现。
+  - type: textarea
+    id: problem
+    attributes:
+      label: 背景与问题
+      description: 要解决什么场景下的痛点？谁受益？
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 期望方案
+      description: 你希望系统如何表现？可包含 API/配置/交互层面的说明。
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: 已考虑的替代方案
+      description: 若有其他实现思路或业界做法，请简要说明。
+    validations:
+      required: false
+  - type: textarea
+    id: scope
+    attributes:
+      label: 影响范围（若已知）
+      description: 可能涉及的网关/业务模块、数据库、兼容性与迁移成本等。
+    validations:
+      required: false
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: 贡献意愿
+      options:
+        - label: 我愿意在讨论通过后提交 PR 实现（不保证一定被合并）
+          required: false

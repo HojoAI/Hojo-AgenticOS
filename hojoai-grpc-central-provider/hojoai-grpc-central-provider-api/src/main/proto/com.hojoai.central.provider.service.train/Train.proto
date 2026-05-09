@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.hojoai.central.provider.grpc";
+option java_outer_classname = "TrainProto";
+
+package train;
+
+service TrainService {
+  rpc getByTrainNumberAndStations (TrainNumberStationsRequest) returns (TrainTableResponse) {}
+  rpc getByStationsAndDate (StationsDateRequest) returns (TrainTableResponse) {}
+  rpc getByCitiesAndDate (CitiesDateRequest) returns (TrainTableResponse) {}
+  rpc getTrainTable (TrainTableUnifiedRequest) returns (TrainTableResponse) {}
+}
+
+message TrainNumberStationsRequest {
+  string tnum = 1;
+  string tdep = 2;
+  string tarr = 3;
+  string date = 4;
+}
+
+message StationsDateRequest {
+  string tdep = 1;
+  string tarr = 2;
+  string date = 3;
+}
+
+message CitiesDateRequest {
+  string cdep = 1;
+  string carr = 2;
+  string date = 3;
+}
+
+message TrainTableUnifiedRequest {
+  string tnum = 1;
+  string tdep = 2;
+  string tarr = 3;
+  string cdep = 4;
+  string carr = 5;
+  string date = 6;
+}
+
+message TrainListItem {
+  string trainnum = 1;
+  string depstan = 2;
+  string arrstan = 3;
+  string depstancode = 4;
+  string arrstancode = 5;
+  string plandeptime = 6;
+  string planarrtime = 7;
+  int32 duration = 8;
+}
+
+message TrainTableData {
+  int32 count = 1;
+  repeated TrainListItem trainlist = 2;
+}
+
+message TrainTableResponse {
+  int32 code = 1;
+  string msg = 2;
+  TrainTableData data = 3;
+}

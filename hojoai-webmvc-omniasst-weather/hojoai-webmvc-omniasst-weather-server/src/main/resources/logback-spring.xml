@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+
+    <property name="log.directory" value="logs/${springAppName}"/>
+
+    <!-- 日志格式：包含traceId -->
+    <property name="log.pattern" value="%date{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%X{traceId:-N/A}] [${springAppName:-}] [%thread] %logger{36} - %message%n"/>
+
+    <!-- console -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- file -->
+    <appender name="File" class="ch.qos.logback.core.FileAppender">
+        <file>${log.directory}/application.log</file>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <append>true</append>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="File"/>
+    </root>
+</configuration>

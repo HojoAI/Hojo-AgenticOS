@@ -1,0 +1,36 @@
+# Memory API 配置示例
+# 将此配置添加到您的 application.yml 中
+
+hojoai:
+  memory:
+    api:
+      # 是否启用 Memory API（默认：true）
+      # 如果不需要使用 Memory API，可以设置为 false
+      enabled: true
+      
+      # Memory API 服务地址（默认：http://localhost:8001）
+      # 开发环境
+      url: http://localhost:8001
+      # 生产环境示例
+      # url: http://memory-api.prod.example.com
+      
+      # 连接超时时间（毫秒，默认：5000）
+      connect-timeout: 5000
+      
+      # 读取超时时间（毫秒，默认：10000）
+      read-timeout: 10000
+      
+      # 是否启用日志（默认：true）
+      log-enabled: true
+      
+      # 日志级别（默认：BASIC）
+      # NONE: 不记录日志
+      # BASIC: 记录请求方法、URL、响应状态码和执行时间
+      # HEADERS: 记录 BASIC 级别信息以及请求和响应头
+      # FULL: 记录所有信息，包括请求和响应体
+      log-level: BASIC
+
+# 如果需要调试 Feign 请求，可以开启以下日志
+logging:
+  level:
+    com.hojoai.omniasst.common.api.memory.client.MemoryApiClient: DEBUG

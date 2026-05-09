@@ -1,0 +1,36 @@
+Hojo-Agentic-OS
+Copyright 2026 HojoAI
+
+This product is licensed under the terms described in the LICENSE file
+in this distribution (a modified Apache License, Version 2.0, with
+additional conditions). A copy of the Apache License, Version 2.0 is
+referenced therein; the full Apache-2.0 text is available at:
+https://www.apache.org/licenses/LICENSE-2.0
+
+Branding, attribution, and related requirements applicable to this Work
+are stated in LICENSE (including conditions regarding HTTP headers,
+metadata fields, and other Hojo or HojoAI branding elements).
+
+Third-party libraries may carry their own copyright and license notices in
+source headers, packaged NOTICE files, or dependency metadata. Those notices
+are provided for attribution and do not modify the license terms in LICENSE
+unless expressly stated by the respective licensors.
+
+This distribution may integrate the following third-party components. They are
+NOT licensed under the terms in LICENSE above; each is governed solely by its
+own licensor’s terms. See also THIRD_PARTY_NOTICES.md in this repository.
+
+----------------------------------------------------------------------
+Microsoft Cognitive Services Speech SDK (Java)
+Maven: com.microsoft.cognitiveservices.speech:client-sdk
+Copyright (c) Microsoft Corporation. All rights reserved.
+License: Microsoft Software License Terms for Cognitive Services Speech SDK
+https://aka.ms/csspeech/license
+----------------------------------------------------------------------
+DingTalk RTC Linux Java SDK
+Maven: com.ding.rtc.linux:ding-rtc-linux-java
+Trademark and software rights: DingTalk / Alibaba Group and respective
+licensors. Use, integration, and redistribution are subject to DingTalk’s
+official license or service agreement supplied with the SDK (not Apache-2.0).
+Obtain current terms from DingTalk / Alibaba Cloud official channels.
+----------------------------------------------------------------------

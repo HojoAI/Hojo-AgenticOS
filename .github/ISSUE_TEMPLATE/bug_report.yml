@@ -1,0 +1,69 @@
+name: Bug 报告
+description: 报告可复现的缺陷或错误行为
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请先浏览已有 Issue，避免重复提交。尽量提供**可复现**的信息（版本、步骤、日志）。
+  - type: textarea
+    id: summary
+    attributes:
+      label: 问题简述
+      description: 一句话说明发生了什么。
+      placeholder: 例如：在 dev 配置下启动 xxx 服务后，调用 yyy 接口返回 500。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 从克隆/构建到触发问题的具体操作顺序。
+      placeholder: |
+        1. …
+        2. …
+        3. …
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望行为
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 实际行为
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境信息
+      description: OS、JDK、Maven、分支/commit、激活的 Spring Profile 等。
+      placeholder: |
+        - OS：
+        - JDK：
+        - Maven：
+        - 分支/commit：
+        - spring.profiles.active：
+    validations:
+      required: true
+  - type: textarea
+    id: module
+    attributes:
+      label: 涉及模块（若已知）
+      description: 例如 hojoai-gateway-omniasst、hojoai-common 等；不确定可写「未知」。
+      placeholder: 未知 / hojoai-xxx
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志与截图
+      description: 相关堆栈、请求/响应片段（请脱敏 token、密码、内网地址）。
+    validations:
+      required: false

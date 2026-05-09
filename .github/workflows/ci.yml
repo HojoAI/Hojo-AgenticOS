@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Install hojoai-parent
+        run: mvn -f hojoai-parent/pom.xml -B clean install -DskipTests
+
+      - name: Install hojoai-common
+        run: mvn -f hojoai-common/pom.xml -B clean install -DskipTests
+
+      - name: Install hojoai-grpc-central-provider
+        run: mvn -f hojoai-grpc-central-provider/pom.xml -B clean install -DskipTests
+
+      - name: Install modules without hojoai-omniasst-common
+        run: |
+          set -e
+          for mod in \
+            hojoai-gateway-omniasst \
+            hojoai-gateway-omniasst-voice \
+            hojoai-gateway-central \
+            hojoai-webmvc-central-account \
+            hojoai-webmvc-omniasst-account \
+            hojoai-webmvc-omniasst-music \
+            hojoai-webmvc-omniasst-weather \
+            hojoai-template
+          do
+            echo "=== $mod ==="
+            mvn -f "$mod/pom.xml" -B clean install -DskipTests
+          done

@@ -1,0 +1,302 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.hojoai.central.provider.grpc";
+option java_outer_classname = "MovieProto";
+option objc_class_prefix = "HW";
+
+package movie;
+
+service MovieService {
+  // 获取热门电影/待上映电影
+  rpc getFilmList (GetFilmListRequestDTO) returns (GetFilmListRespDTO) {}
+  // 获取某影片排期的影院
+  rpc getScheduleCinemaList (GetScheduleCinemaListRequestDTO) returns (GetScheduleCinemaListRespDTO) {}
+  // 获取影院某影片的场次
+  rpc getFilmShowList (GetFilmShowListRequestDTO) returns (GetFilmShowListRespDTO) {}
+  // 获取影片某场次的座位
+  rpc getShowSeatList (GetShowSeatListRequestDTO) returns (GetShowSeatListRespDTO) {}
+  // 获取城市的影院列表
+  rpc getCinemaList (GetCinemaListRequestDTO) returns (GetCinemaListRespDTO) {}
+  // 获取影院详情和电影列表
+  rpc getCinemaFilmList (GetCinemaFilmListRequestDTO) returns (GetCinemaFilmListRespDTO) {}
+  // 获取影片信息及近期排期
+  rpc getFilmScheduleList (GetFilmScheduleListRequestDTO) returns (GetFilmScheduleListRespDTO) {}
+  // 创建订单接口
+//  rpc createOrder (CreateOrderRequestDTO) returns (CreateOrderRespDTO) {}
+//  // 支付接口
+//  rpc autoPay (AutoPayRequestDTO) returns (AutoPayRespDTO) {}
+//  // 获取订单详情
+//  rpc getOrderDetail (GetOrderDetailRequestDTO) returns (GetOrderDetailRespDTO) {}
+}
+
+// 获取影片列表
+message GetFilmListRequestDTO {
+  int32 type = 1;
+  string keyWord = 2;
+  int32 pageIndex = 3;
+  int32 pageSize = 4;
+}
+
+message GetFilmListRespDTO {
+  int32 total = 1;
+  repeated FilmInfo filmList = 2;
+  bool success = 3;
+  string msg = 4;
+}
+
+message GetFilmListVal {
+  int32 total = 1;
+  repeated FilmInfo filmList = 2;
+}
+
+message FilmInfo {
+  string filmId = 1;
+  string filmCode = 2;
+  string name = 3;
+  string pic = 4;
+  string grade = 5;
+  int32 like = 6;
+  string director = 7;
+  string leadingRole = 8;
+  string publishDate = 9;
+  int32 duration = 10;
+  string filmTypes = 11;
+  string movieArea = 12;
+  string language = 13;
+  string intro = 14;
+}
+
+// 获取影片排期
+message GetScheduleCinemaListRequestDTO {
+  string filmId = 1;
+  string cityCode = 2;
+  string cityName = 3;
+  string regionCode = 4;
+  string regionName = 5;
+  string keyword = 6;
+  string longitude = 7;
+  string latitude = 8;
+  string date = 9;
+  int32 pageIndex = 10;
+  int32 pageSize = 11;
+}
+
+message GetScheduleCinemaListRespDTO {
+  int32 total = 1;
+  repeated CinemaVal data = 2;
+  bool success = 3;
+  string msg = 4;
+}
+
+message CinemaVal {
+  string cinemaId = 1;
+  string cinemaName = 2;
+  string cityName = 3;
+  string cinemaAddress = 4;
+  string tel = 5;
+  string longitude = 6;
+  string latitude = 7;
+  string downPrice = 8;
+  string distanceText = 9;
+}
+
+// 获取影片场次
+message GetFilmShowListRequestDTO {
+  string cinemaId = 1;
+  string filmId = 2;
+  string date = 3;
+}
+
+message GetFilmShowListRespDTO {
+  repeated FilmShowInfo showList = 1;
+  repeated ScheduleInfo scheduleList = 2;
+  bool success = 3;
+  string msg = 4;
+}
+
+message FilmShowInfo {
+  string showId = 1;
+  string hallName = 2;
+  string cinemaId = 3;
+  string filmId = 4;
+  string filmCode = 5;
+  string filmName = 6;
+  int32 duration = 7;
+  string showTime = 8;
+  string stopSellTime = 9;
+  string language = 10;
+  string showVersionType = 11;
+  string planType = 12;
+  string downNetPrice = 13;
+  string downSalePrice = 14;
+}
+
+message ScheduleInfo {
+  string showTime = 1;
+}
+
+// 获取影片场次座位
+message GetShowSeatListRequestDTO {
+  string showId = 1;
+}
+
+message GetShowSeatListRespDTO {
+  FilmInfo filmInfo = 1;
+  FilmShowInfo showInfo = 2;
+  SeatsInfo seatsInfo = 3;
+  bool success = 4;
+  string msg = 5;
+}
+
+// 座位信息
+message SeatsInfo {
+  int32 restrictions = 1;
+  int32 maxColumnNo = 2;
+  int32 minColumnNo = 3;
+  int32 maxRowNo = 4;
+  int32 minRowNo = 5;
+  int32 realSeatRowCount = 6;
+  bool isExistLoveSeat = 7;
+  repeated Seat seats = 8;
+  repeated AreaPrice areaPrices = 9;
+}
+
+// 单个座位
+message Seat {
+  string seatId = 1;
+  string columnNo = 2;
+  string rowNo = 3;
+  string seatNo = 4;
+  string status = 5;
+  int32 loveStatus = 6;
+  string areaId = 7;
+  string rowName = 8;
+  string areaSeatColor = 9;
+  string netPrice = 10;
+  string salePrice = 11;
+}
+
+// 区域价格
+message AreaPrice {
+  string areaId = 1;
+  string netPrice = 2;
+  string salePrice = 3;
+}
+
+message GetCinemaListRequestDTO {
+  string cityCode = 1;
+  string cityName = 2;
+  string regionCode = 3;
+  string regionName = 4;
+  string keyword = 5;
+  string longitude = 6;
+  string latitude = 7;
+  int32 pageIndex = 8;
+  int32 pageSize = 9;
+}
+
+message GetCinemaListRespDTO {
+  int32 total = 1;
+  repeated CinemaVal cinemaList = 2;
+  bool success = 3;
+  string msg = 4;
+}
+
+message GetCinemaFilmListRequestDTO {
+  string cinemaId = 1;
+}
+
+message GetCinemaFilmListRespDTO {
+    CinemaVal cinemaVal = 1;
+    repeated FilmInfo filmList = 2;
+    bool success = 3;
+    string msg = 4;
+}
+
+message GetFilmScheduleListRequestDTO {
+  string filmId = 1;
+  string cityCode = 2;
+  string cityName = 3;
+}
+
+message GetFilmScheduleListRespDTO {
+  FilmInfo filmInfo = 1;
+  repeated ScheduleInfo scheduleInfoList = 2;
+  bool success = 3;
+  string msg = 4;
+}
+
+//message CreateOrderRequestDTO {
+//  string customerOrderNo = 1;
+//  string orderAmount = 2;
+//  string cinemaId = 3;
+//  string filmId = 4;
+//  string showId = 5;
+//  repeated string seatIds = 6;
+//  bool acceptChangeSeat = 7;
+//  string mobile = 8;
+//  string callBackUrl = 9;
+//}
+//
+//message CreateOrderRespDTO {
+//  string orderNo = 1;
+//  bool success = 2;
+//  string msg = 3;
+//}
+//
+//message AutoPayRequestDTO {
+//  string orderNo = 1;
+//  string payAmount = 2;
+//  string sign = 3;
+//}
+//
+//message AutoPayRespDTO {
+//  bool success = 1;
+//  bool respSuccess = 2;
+//  string msg = 3;
+//}
+//
+//message GetOrderDetailRequestDTO {
+//  string orderNo = 1;
+//}
+//
+//message GetOrderDetailRespDTO {
+//  string orderNo = 1;
+//  string customerOrderNo = 2;
+//  string cinemaId = 3;
+//  string cinemaName = 4;
+//  string cinemaAddress = 5;
+//  string cinemaTel = 6;
+//  string cityName = 7;
+//  string longitude = 8;
+//  string latitude = 9;
+//  string filmId = 10;
+//  string filmName = 11;
+//  string filmImg = 12;
+//  string showId = 13;
+//  string seatIds = 14;
+//  string hallName = 15;
+//  string showTime = 16;
+//  string mobile = 17;
+//  bool acceptChangeSeat = 18;
+//  int32 ticketNum = 19;
+//  string seatNos = 20;
+//  string originalSeatNos = 21;
+//  string ticketsData = 22;
+//  string ticketTime = 23;
+//  string orderAmount = 24;
+//  int32 orderStatus = 25;
+//  int32 payStatus = 26;
+//  string payTime = 27;
+//  string transactionNo = 28;
+//  string refundAmount = 29;
+//  string refundSuccessTime = 30;
+//  string refundTransactionNo = 31;
+//  string callbackUrl = 32;
+//  string payLimitTime = 33;
+//  string unFinishedReason = 34;
+//  string createTime = 35;
+//  string success = 36;
+//  string msg = 37;
+//}

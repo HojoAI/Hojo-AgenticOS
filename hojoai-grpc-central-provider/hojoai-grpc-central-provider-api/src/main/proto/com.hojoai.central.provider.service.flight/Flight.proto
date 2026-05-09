@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.hojoai.central.provider.grpc";
+option java_outer_classname = "FlightProto";
+
+package flight;
+
+service FlightService {
+  rpc getFlightByNumberAndDate (GetFlightByNumberAndDateRequest) returns (GetFlightByNumberAndDateResponse) {}
+}
+
+message GetFlightByNumberAndDateRequest {
+  string fnum = 1;
+  string date = 2;
+  string lang = 3;
+}
+
+message FillFlightInfo {
+  string flight_no = 1;
+  string flight_depcode = 2;
+  string flight_arrcode = 3;
+  string flight_state = 4;
+  string flight_deptime_plan_date = 5;
+  string flight_arrtime_plan_date = 6;
+  string flight_deptime_date = 7;
+  string flight_arrtime_date = 8;
+}
+
+message GetFlightByNumberAndDateResponse {
+  string fcategory = 1;
+  string ftype = 2;
+  string fservice = 3;
+  string flight_no = 4;
+  string flight_company = 5;
+  string flight_depcode = 6;
+  string flight_arrcode = 7;
+  string aircraft_number = 8;
+  string flight_deptime_plan_date = 9;
+  string flight_arrtime_plan_date = 10;
+  string flight_deptime_ready_date = 11;
+  string flight_arrtime_ready_date = 12;
+  string flight_deptime_date = 13;
+  string flight_arrtime_date = 14;
+  string board_gate = 15;
+  string reach_exit = 16;
+  string baggage_id = 17;
+  string board_state = 18;
+  string flight_state = 19;
+  string flight_h_terminal = 20;
+  string flight_terminal = 21;
+  string flight_dep = 22;
+  string flight_arr = 23;
+  string flight_dep_airport = 24;
+  string flight_arr_airport = 25;
+  string dst_timezone = 26;
+  string org_timezone = 27;
+  string stop_flag = 28;
+  string share_flight_no = 29;
+  FillFlightInfo fill_flight_info = 30;
+}

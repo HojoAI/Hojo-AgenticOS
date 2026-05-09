@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.hojoai.central.provider.grpc";
+option java_outer_classname = "OrderProto";
+option objc_class_prefix = "HW";
+
+package order;
+
+service OrderService {
+  // 创建订单
+  rpc createOrder (CreateOrderRequestDTO) returns (CreateOrderRespDTO) {}
+  // 获取订单详情
+  rpc getOrderDetail (GetOrderDetailRequestDTO) returns (GetOrderDetailRespDTO) {}
+  // 支付宝回调通知
+  rpc alipayNotify (AlipayNotifyRequestDTO) returns (AlipayNotifyRespDTO) {}
+  // 磐河回调通知
+  rpc panheNotify (PanheNotifyRequestDTO) returns (PanheNotifyRespDTO) {}
+}
+
+message CreateOrderRequestDTO {
+  string userId = 1;
+  string orderAmount = 2;
+  string cinemaId = 3;
+  string filmId = 4;
+  string showId = 5;
+  repeated string seatIdList = 6;
+  string alipayType = 7;
+  bool acceptChangeSeat = 8;
+  string phone = 9;
+  string orderNo = 10;
+}
+
+message CreateOrderRespDTO {
+  string orderNo = 1;
+  string orderStr = 2;
+  int64 expireTime = 3;
+  bool success = 4;
+  string errorMsg = 5;
+}
+
+message GetOrderDetailRequestDTO {
+  string userId = 1;
+  string orderNo = 2;
+}
+
+message GetOrderDetailRespDTO {
+  string respJson = 1;
+}
+
+//message GetOrderDetailRespDTO {
+//  // 订单编号
+//  string orderNo = 1;
+//  // 影院名称
+//  string cinemaName = 2;
+//  // 影厅名称
+//  string hallName = 3;
+//  // 电影名称
+//  string filmName = 4;
+//  // 订单状态
+//  string orderStatus = 5;
+//  // 影票张数
+//  int32 ticketCount = 6;
+//  // 影片海报URL
+//  string filmImgUrl = 7;
+//  // 开场时间
+//  string showTime = 8;
+//  // 座位名称（多个座位用逗号分隔）
+//  string seatNames = 9;
+//  // 订单金额
+//  string orderAmount = 10;
+//  // 影票数据列表
+//  repeated TicketData ticketsData = 11;
+//}
+//
+//message TicketData {
+//  string serialNumber = 1;
+//  string verificationCode = 2;
+//  string qrCodeUrl = 3;
+//}
+
+message AlipayNotifyRequestDTO {
+  map<string, string> paramMap = 1;
+}
+
+message AlipayNotifyRespDTO {
+  bool success = 1;
+}
+
+message PanheNotifyRequestDTO {
+  map<string, string> paramMap = 1;
+}
+
+message PanheNotifyRespDTO {
+  bool success = 1;
+  string movieDetailStr = 2;
+}

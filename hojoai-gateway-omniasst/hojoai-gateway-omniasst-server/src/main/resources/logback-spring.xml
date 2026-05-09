@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+
+    <property name="log.directory" value="logs/${springAppName}"/>
+
+    <!-- console -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date [%-5level] [${springAppName:-}] [%X{traceId:-}] [%X{spanId:-}] [%thread] %logger - %message%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- rolling -->
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.directory}/rolling.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${log.directory}/rolling.log.%i</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>1</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%date [%-5level] [${springAppName:-}] [%X{traceId:-}] [%X{spanId:-}] [%thread] %logger - %message%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- daily -->
+    <appender name="DailyRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.directory}/daily/daily.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.directory}/daily/daily.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%date [%-5level] [${springAppName:-}] [%X{traceId:-}] [%X{spanId:-}] [%thread] %logger - %message%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- error -->
+    <appender name="ErrorRollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.directory}/error/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${log.directory}/error/error.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%date [%-5level] [${springAppName:-}] [%X{traceId:-}] [%X{spanId:-}] [%thread] %logger - %message%n</pattern>
+        </encoder>
+
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <logger name="org" level="ERROR"/>
+
+    <root level="INFO">
+        <appender-ref ref="Console"/>
+        <appender-ref ref="RollingFile"/>
+        <appender-ref ref="DailyRollingFile"/>
+        <appender-ref ref="ErrorRollingFile"/>
+    </root>
+</configuration>

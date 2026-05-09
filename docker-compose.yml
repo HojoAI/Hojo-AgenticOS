@@ -1,0 +1,395 @@
+services:
+  # ============================================================
+  # 基础设施
+  # ============================================================
+  nacos:
+    image: nacos/nacos-server:v3.2.0
+    container_name: nacos-standalone
+    restart: unless-stopped
+    environment:
+      - MODE=standalone
+      - NACOS_AUTH_TOKEN=VGhpc0lzTXlDdXN0b21TZWNyZXRLZXkwMTIzNDU2Nzg=
+      - NACOS_AUTH_IDENTITY_KEY=serverIdentity
+      - NACOS_AUTH_IDENTITY_VALUE=security
+    ports:
+      # 本机端口可通过 .env 中 NACOS_CONSOLE_HOST_PORT 修改（避免与其它占用 8080 的进程冲突）
+      - "${NACOS_CONSOLE_HOST_PORT:-8080}:8080"
+      - "8848:8848"
+      - "9848:9848"
+    volumes:
+      - ./data/nacos:/home/nacos/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8848/nacos"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-dev
+    restart: unless-stopped
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=hojoai
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis-dev
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: postgres-pgvector
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=omniasst
+      - POSTGRES_PASSWORD=devpass
+      - POSTGRES_DB=omniasst
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U omniasst"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ============================================================
+  # 数据库初始化（一次性任务）
+  # ============================================================
+  mysql-init:
+    image: mysql:8.0
+    container_name: hojoai-mysql-init
+    restart: "no"
+    volumes:
+      - ./db/schema/mysql:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=hojoai
+    command: >
+      bash -c '
+        echo "Waiting for MySQL to be ready...";
+        until mysqladmin ping -h mysql --silent; do sleep 2; done;
+        echo "Creating databases...";
+        mysql -h mysql -uroot -e "CREATE DATABASE IF NOT EXISTS \`hojoai-central-account\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+        mysql -h mysql -uroot -e "CREATE DATABASE IF NOT EXISTS \`hojoai-omniasst\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;";
+        echo "Running init scripts...";
+        mysql -h mysql -uroot hojoai-central-account < /docker-entrypoint-initdb.d/hojoai-central-account.sql;
+        mysql -h mysql -uroot hojoai-omniasst < /docker-entrypoint-initdb.d/hojoai-omniasst.sql;
+        echo "MySQL init complete.";
+      '
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  postgres-init:
+    image: postgres:16
+    container_name: hojoai-postgres-init
+    restart: "no"
+    volumes:
+      - ./db/schema/postgresql:/docker-entrypoint-initdb.d
+    environment:
+      - PGUSER=omniasst
+      - PGPASSWORD=devpass
+      - PGDATABASE=omniasst
+    command: >
+      bash -c "
+        echo 'Waiting for PostgreSQL to be ready...';
+        until pg_isready -h postgres -p 5432; do sleep 2; done;
+        echo 'Running init scripts...';
+        psql -h postgres -U omniasst -d omniasst -f /docker-entrypoint-initdb.d/omniasst.sql;
+        echo 'PostgreSQL init complete.';
+      "
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ============================================================
+  # 中台服务 (11001-110xx)
+  # ============================================================
+  central-account:
+    build:
+      context: hojoai-webmvc-central-account
+      dockerfile: Dockerfile
+    container_name: hojoai-central-account
+    restart: unless-stopped
+    ports:
+      - "11002:11002"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_DATABASE=hojoai-central-account
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      nacos:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  grpc-central-provider:
+    build:
+      context: hojoai-grpc-central-provider
+      dockerfile: Dockerfile
+    container_name: hojoai-grpc-central-provider
+    restart: unless-stopped
+    ports:
+      - "11003:11003"
+      - "11103:11103"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+    depends_on:
+      nacos:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  central-gateway:
+    build:
+      context: hojoai-gateway-central
+      dockerfile: Dockerfile
+    container_name: hojoai-central-gateway
+    restart: unless-stopped
+    ports:
+      - "11001:11001"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+    depends_on:
+      nacos:
+        condition: service_healthy
+      central-account:
+        condition: service_started
+
+  # ============================================================
+  # Omniasst 业务服务 (12001-120xx)
+  # ============================================================
+  omniasst-account:
+    build:
+      context: hojoai-webmvc-omniasst-account
+      dockerfile: Dockerfile
+    container_name: hojoai-omniasst-account
+    restart: unless-stopped
+    ports:
+      - "12004:12004"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_DATABASE=hojoai-omniasst
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      nacos:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+
+  management:
+    build:
+      context: hojoai-webmvc-omniasst-management
+      dockerfile: Dockerfile
+    container_name: hojoai-management
+    restart: unless-stopped
+    ports:
+      - "12005:12005"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_DATABASE=hojoai-omniasst
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      nacos:
+        condition: service_healthy
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  sysagent:
+    build:
+      context: hojoai-websocket-omniasst-sysagent
+      dockerfile: Dockerfile
+    container_name: hojoai-sysagent
+    restart: unless-stopped
+    ports:
+      - "12003:12003"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+    depends_on:
+      nacos:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      management:
+        condition: service_started
+
+  translate:
+    build:
+      context: hojoai-webmvc-omniasst-translate
+      dockerfile: Dockerfile
+    container_name: hojoai-translate
+    restart: unless-stopped
+    ports:
+      - "12006:12006"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+    depends_on:
+      nacos:
+        condition: service_healthy
+
+  meeting:
+    build:
+      context: hojoai-webmvc-omniasst-meeting
+      dockerfile: Dockerfile
+      args:
+        FFMPEG_FETCH_BASE: ${FFMPEG_FETCH_BASE:-docker.m.daocloud.io/library/alpine:3.19}
+    container_name: hojoai-meeting
+    restart: unless-stopped
+    ports:
+      - "12007:12007"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+    depends_on:
+      nacos:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+  focus:
+    build:
+      context: hojoai-webmvc-omniasst-focus
+      dockerfile: Dockerfile
+    container_name: hojoai-focus
+    restart: unless-stopped
+    ports:
+      - "12008:12008"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+    depends_on:
+      nacos:
+        condition: service_healthy
+
+  music:
+    build:
+      context: hojoai-webmvc-omniasst-music
+      dockerfile: Dockerfile
+    container_name: hojoai-music
+    restart: unless-stopped
+    ports:
+      - "12009:12009"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+    depends_on:
+      nacos:
+        condition: service_healthy
+
+  weather:
+    build:
+      context: hojoai-webmvc-omniasst-weather
+      dockerfile: Dockerfile
+    container_name: hojoai-weather
+    restart: unless-stopped
+    ports:
+      - "12010:12010"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+    depends_on:
+      nacos:
+        condition: service_healthy
+
+  gateway-omniasst:
+    build:
+      context: hojoai-gateway-omniasst
+      dockerfile: Dockerfile
+    container_name: hojoai-gateway-omniasst
+    restart: unless-stopped
+    ports:
+      - "12001:12001"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+    depends_on:
+      nacos:
+        condition: service_healthy
+      sysagent:
+        condition: service_started
+
+  gateway-omniasst-voice:
+    build:
+      context: hojoai-gateway-omniasst-voice
+      dockerfile: Dockerfile
+    container_name: hojoai-gateway-omniasst-voice
+    restart: unless-stopped
+    ports:
+      - "12002:12002"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - NACOS_SERVER_ADDR=${NACOS_SERVER_ADDR}
+    depends_on:
+      nacos:
+        condition: service_healthy

@@ -1,0 +1,32 @@
+# Memory API 测试配置
+# 参考 EverMemOS/tests/test_memory_controller.py
+hojoai:
+  memory:
+    api:
+      # API服务地址（阿里云部署环境）
+      url: http://121.40.83.221:1995
+      
+      # 连接和读取超时时间（毫秒）
+      connectTimeout: 10000
+      readTimeout: 60000
+      
+      # 日志配置
+      logEnabled: true
+      logLevel: FULL
+      
+      # 租户配置（多租户场景）
+      # 参考 Python 测试中的 DEFAULT_ORGANIZATION_ID, DEFAULT_SPACE_ID, DEFAULT_HASH_KEY
+      organizationId: test_memory_api_organization
+      spaceId: test_memory_api_space
+      hashKey: test_memory_api_hash_key
+
+# Spring 配置
+spring:
+  application:
+    name: memory-api-test
+    
+# 日志配置
+logging:
+  level:
+    com.hojoai.omniasst.common: DEBUG
+    feign: DEBUG

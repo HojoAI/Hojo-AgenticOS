@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CRSPY Sign In</title>
+    <style>
+      .container {
+        text-align: center;
+        margin-top: 81px;
+      }
+      .logo {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px auto;
+        border-radius: 8px;
+      }
+      h1 {
+        margin: 0 0 10px 0;
+        font-size: 24px;
+      }
+      .magic-link-btn {
+        display: inline-block;
+        padding: 15px 130px;
+        font-size: 16px;
+        color: #fff !important;
+        background-color: #2b2d28;
+        border: none;
+        border-radius: 16px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .info {
+        position: absolute;
+        bottom: 45px;
+        margin-top: 20px;
+        font-size: 12px;
+        color: #2b2d2880;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Logo 预留位置 -->
+      <div class="logo">
+        <img
+          src="https://hojo-website-daily.oss-cn-shanghai.aliyuncs.com/hojo-static/assets/global-img/pa/logo-crspy.svg"
+          alt="crspy"
+        />
+      </div>
+
+      <p
+        style="
+          font-size: 14px;
+          font-weight: 600;
+          line-height: 1.3;
+          color: #18171c;
+          margin-bottom: 88px;
+        "
+      >
+        Sign in to CRSPY
+      </p>
+      <p
+        style="
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 1.3;
+          color: #18171c;
+        "
+      >
+        You're signing in using a secure email link.
+      </p>
+
+      <a href="{{MAGIC_LINK_URL}}" class="magic-link-btn"
+        >Sign in with Magic Link</a
+      >
+
+      <p class="info">If this wasn't you, you can safely ignore this page.</p>
+    </div>
+  </body>
+</html>

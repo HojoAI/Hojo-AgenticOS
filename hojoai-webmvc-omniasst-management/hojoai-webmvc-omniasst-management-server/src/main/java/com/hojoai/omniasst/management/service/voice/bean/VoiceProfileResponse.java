@@ -1,0 +1,101 @@
+/*
+ * Copyright 2026 HojoAI
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.hojoai.omniasst.management.service.voice.bean;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.Date;
+
+/**
+ * v1 查询音色/声纹档案统一返回结构
+ */
+public class VoiceProfileResponse {
+    private Long id;
+    private String userId;
+    private String voiceId;
+    private String voiceName;
+    private String provider;
+    private Date createdAt;
+    private Date updatedAt;
+    private String nickname;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getVoiceId() {
+        return voiceId;
+    }
+
+    public void setVoiceId(String voiceId) {
+        this.voiceId = voiceId;
+    }
+
+    public String getVoiceName() {
+        return voiceName;
+    }
+
+    public void setVoiceName(String voiceName) {
+        this.voiceName = voiceName;
+    }
+
+    public String getProvider() {
+        return provider;
+    }
+
+    public void setProvider(String provider) {
+        this.provider = provider;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @JsonProperty("nickName")
+    public String getNickname() {
+        return nickname;
+    }
+
+    @JsonProperty("nickName")
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+}
+
