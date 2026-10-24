@@ -13,6 +13,19 @@
 
 Hojo AgenticOS (full name Holistic Omni Joint Operator) is an open-source holistic, multimodal, cross-device agentic interaction system: it covers the full scenario domain through multi-agent collaborative orchestration (Holistic), supports voice, text, and streaming multimodality (Omni), and targets collaborative terminals such as earbuds, in-car systems, wearables, and smartphones (Joint Operator).
 
+<a id="downloads"></a>
+
+## Download Hojo
+
+Experience Hojo on mobile and desktop. Choose your platform and service region.
+
+| Platform | Hojo CN<br>(Mainland China) | Hojo Global |
+| :--- | :---: | :---: |
+| **Android** | [Official Download][download-cn-android] | [Google Play][download-global-android] |
+| **iOS** | [App Store][download-cn-ios] | [App Store][download-global-ios] |
+| **macOS** | [Download][download-cn-macos] | [Download][download-global-macos] |
+| **Windows** | [Download][download-cn-windows] | [Download][download-global-windows] |
+
 ## Industry Status
 
 - High barriers to AI integration for hardware: Hardware AI-native development lags far behind software. Most hardware has not yet entered the AI-native era. LLM companies often provide only general SDKs or APIs, while creating truly seamless hardware-integrated experiences requires extensive complex work.
@@ -39,6 +52,7 @@ Therefore, we believe a Personal Agent needs several key characteristics, which 
 
 ## Table of Contents
 
+- [Download Hojo](#downloads)
 - [Positioning and Capabilities](#positioning-and-capabilities)
 - [Why Open Source This Repository](#why-open-source-this-repository)
 - [Enterprise Users and Typical Scenarios](#enterprise-users-and-typical-scenarios)
@@ -291,3 +305,12 @@ See [License](#license): In addition to Apache-2.0, there are specific branding 
 **Trademarks / Brand Logos**: **Hojo**, **Hojo.ai**, as well as the **Hojo** trademark and related **Logos**. We encourage integration and commercial use within the scope of the open-source license. Please prominently state in your product or service that the technology is powered by **Hojo**. Do not use the **Hojo** name to mislead or imply unauthorized official endorsement. Details can be found in [TRADEMARK.md](docs/TRADEMARK.md).
 
 For Enterprise edition (stronger server capabilities, client features, and custom development), please contact `bd@hojoai.com`.
+
+[download-cn-android]: https://www.hojoai.com/share/download?environment=domestic&lang=en-US
+[download-cn-ios]: https://apps.apple.com/app/id6773312722
+[download-cn-macos]: https://cdn.hojoai.com/download/apks/Hojo-domestic-release-1.3.0.dmg
+[download-cn-windows]: https://cdn.hojoai.com/download/apks/Hojo-domestic-release-setup-1.3.0.exe
+[download-global-android]: https://www.hojoai.com/share/download?environment=oversea&lang=en-US
+[download-global-ios]: https://apps.apple.com/app/id6760108275
+[download-global-macos]: https://cdn.hojoai.com/download/apks/Hojo-overseas-release-1.3.0.dmg
+[download-global-windows]: https://cdn.hojoai.com/download/apks/Hojo-overseas-release-setup-1.3.0.exe

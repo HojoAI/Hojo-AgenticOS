@@ -13,6 +13,19 @@
 
 Hojo AgenticOS（全称Holistic Omni Joint Operator）是开源的全域、全模态、跨设备智能体交互系统：以多智能体协同编排覆盖完整场景域（Holistic），支持语音、文本与流式多模态（Omni），并面向耳机、车机、穿戴与手机等协同终端（Joint Operator）。
 
+<a id="downloads"></a>
+
+## 下载 Hojo
+
+在手机与电脑上体验 Hojo，选择适合你的设备与服务地区。
+
+| 平台 | Hojo CN<br>（中国大陆版） | Hojo Global<br>（国际版） |
+| :--- | :---: | :---: |
+| **Android** | [官方下载][download-cn-android] | [Google Play][download-global-android] |
+| **iOS** | [App Store][download-cn-ios] | [App Store][download-global-ios] |
+| **macOS** | [下载][download-cn-macos] | [下载][download-global-macos] |
+| **Windows** | [下载][download-cn-windows] | [下载][download-global-windows] |
+
 ## 行业现状
 - 智能硬件接入AI能力门槛高：硬件AI化远落后于软件，大多数硬件仍未迈入AI-native时代。大模型公司往往仅提供通用SDK或API，真正落到硬件产生用户体验良好的交互需要大量复杂工作
 - 多设备单点使用问题，无法构建互联互通的使用场景以及数据体系：用户使用各种品牌的设备，多设备AI接入无统一标准，数据和场景无法连通，生产力低下，无法形成全场景联动
@@ -38,6 +51,7 @@ Hojo AgenticOS（全称Holistic Omni Joint Operator）是开源的全域、全�
 
 ## 目录
 
+- [下载 Hojo](#downloads)
 - [定位与能力边界](#定位与能力边界)
 - [为何开源本仓库](#为何开源本仓库)
 - [企业级用户与典型场景](#企业级用户与典型场景)
@@ -287,3 +301,12 @@ Java **21**；了解到大多数硬件厂商均选择Java作为服务端研发�
 **商标 / 品牌标识**：**Hojo**、**Hojo.ai**，以及 **Hojo** 商标与相关 **Logo**。鼓励在开源许可范围内集成与商业使用；请在产品或服务中显著声明技术来源于 **Hojo**；不得以 **Hojo** 名义误导或暗示未经授权的官方背书。细则见 [TRADEMARK_zh.md](docs/TRADEMARK_zh.md)。
 
 企业版（更强大的服务端能力、客户端功能及定制开发）请联系 `bd@hojoai.com`。
+
+[download-cn-android]: https://www.hojoai.com/share/download?environment=domestic
+[download-cn-ios]: https://apps.apple.com/app/id6773312722
+[download-cn-macos]: https://cdn.hojoai.com/download/apks/Hojo-domestic-release-1.3.0.dmg
+[download-cn-windows]: https://cdn.hojoai.com/download/apks/Hojo-domestic-release-setup-1.3.0.exe
+[download-global-android]: https://play.google.com/store/apps/details?id=com.hojoai.personalassistant
+[download-global-ios]: https://apps.apple.com/app/id6760108275
+[download-global-macos]: https://cdn.hojoai.com/download/apks/Hojo-overseas-release-1.3.0.dmg
+[download-global-windows]: https://cdn.hojoai.com/download/apks/Hojo-overseas-release-setup-1.3.0.exe
